@@ -1,50 +1,43 @@
-#include <Windows.h>
 #include <iostream>
-#include <string>
+#include <iomanip>
 #include <bitset>
-#include <intrin.h>
 
-// Validates that input is 32 characters and only contains '0' or '1'
-bool IsInputValid(const std::string& input)
-{
-    if (input.length() != 32)
-        return false;
+using namespace std;
 
-    for (char c : input)
-    {
-        if (c != '0' && c != '1')
-            return false;
-    }
+// Function to convert big endian to little endian
+uint32_t littleToBig(uint32_t value);
 
-    return true;
-}
-
-// Converts binary string to uint32_t
-uint32_t ConvertBinaryStringToUInt32(const std::string& input)
-{
-    return static_cast<uint32_t>(std::bitset<32>(input).to_ulong());
-}
-
-int main()
-{
-    std::string userInput;
-
-    while (true)
-    {
-        std::cout << "Please enter a 32-character binary number consisting of 0's and 1's:\n> ";
-        std::cin >> userInput;
-
-        if (IsInputValid(userInput))
-        {
-            uint32_t value = ConvertBinaryStringToUInt32(userInput);
-            value = _byteswap_ulong(value);
-            std::cout << "Converted Value: 0x" << std::hex << value << std::dec << "\n\n";
-        }
-        else
-        {
-            std::cout << "Invalid input. Please ensure it's 32 binary digits (0 or 1 only).\n\n";
-        }
-    }
-
+int main() {
+    string binaryInput;
+    
+    // Accept binary input from user
+    cout << "Enter a 32-bit binary number: ";
+    cin >> binaryInput;
+    
+    // Convert binary string to integer using bitset
+    bitset<32> bits(binaryInput);
+    uint32_t number = bits.to_ulong();
+    
+    // Convert to hexadecimal (big endian)
+    cout << "Hexadecimal (Big Endian): 0x" 
+         << uppercase << hex << setfill('0') << setw(8) 
+         << number << endl;
+    
+    // Convert to little endian
+    uint32_t littleEndian = convertEndianness(number);
+    
+    // Display in hexadecimal (little endian)
+    cout << "Hexadecimal (Little Endian): 0x" 
+         << uppercase << hex << setfill('0') << setw(8) 
+         << littleEndian << endl;
+    
     return 0;
+}
+
+// Function to convert big endian to little endian
+uint32_t littleToBig(uint32_t value) {
+    return ((value & 0xFF000000) >> 24) |
+           ((value & 0x00FF0000) >> 8)  |
+           ((value & 0x0000FF00) << 8)  |
+           ((value & 0x000000FF) << 24);
 }
