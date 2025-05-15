@@ -8,19 +8,23 @@
 
 bool is_valid_binary(const std::string& input);
 
-int main() {
-    std::string binary_input;
+int main() 
+{
+    std::string userInput;
     char continue_choice;
 
-    do {
+    do 
+    {
+        // clear CLI
         system("cls");
+        
         bool valid_input = false;
 
         while (!valid_input) {
             std::cout << "Enter a 32-bit binary number (32 0's and 1's only):\n";
-            std::getline(std::cin, binary_input);
+            std::getline(std::cin, userInput);
 
-            if (!is_valid_binary(binary_input)) {
+            if (!is_valid_binary(userInput)) {
                 std::cout << "Invalid input! Please enter exactly 32 binary digits (0s and 1s).\n\n";
                 continue;
             }
@@ -28,7 +32,7 @@ int main() {
         }
 
         // Convert binary string to integer
-        uint32_t big_endian = std::bitset<32>(binary_input).to_ulong();
+        uint32_t big_endian = std::bitset<32>(userInput).to_ulong();
         
         // Show hex conversion step
         std::cout << "\nResults:\n";
