@@ -5,21 +5,15 @@
 #include <iomanip>
 #include <limits>
 
-// Function to convert between big and little endian
-uint32_t swap_endian(uint32_t value);
 
-// Function to validate binary input
 bool is_valid_binary(const std::string& input);
-
-// Function to clear screen (cross-platform)
-void clear_screen();
 
 int main() {
     std::string binary_input;
     char continue_choice;
 
     do {
-        clear_screen();
+        system("cls");
         bool valid_input = false;
 
         while (!valid_input) {
@@ -33,18 +27,21 @@ int main() {
             valid_input = true;
         }
 
-        // Convert string to integer
+        // Convert binary string to integer
         uint32_t big_endian = std::bitset<32>(binary_input).to_ulong();
         
-        // Convert to little endian
-        uint32_t little_endian = swap_endian(big_endian);
-        
-        // Print results
+        // Show hex conversion step
         std::cout << "\nResults:\n";
         std::cout << "Big Endian (binary):    " << std::bitset<32>(big_endian) << "\n";
-        std::cout << "Little Endian (binary): " << std::bitset<32>(little_endian) << "\n";
+        std::cout << "Big Endian (hex):       0x" << std::hex << std::setfill('0') 
+                  << std::setw(8) << big_endian << "\n";
+
+        // Convert to little endian using Windows byte swap
+        uint32_t little_endian = _byteswap_ulong(big_endian);
+        
         std::cout << "Little Endian (hex):    0x" << std::hex << std::setfill('0') 
-                  << std::setw(8) << little_endian << "\n\n";
+                  << std::setw(8) << little_endian << "\n";
+        std::cout << "Little Endian (binary): " << std::bitset<32>(little_endian) << "\n\n";
 
         // Ask if user wants to continue
         std::cout << "Would you like to convert another number? (y/n): ";
@@ -58,14 +55,6 @@ int main() {
     return 0;
 }
 
-// Function to convert between big and little endian
-uint32_t swap_endian(uint32_t value) {
-    return ((value & 0xFF000000) >> 24) |
-           ((value & 0x00FF0000) >> 8)  |
-           ((value & 0x0000FF00) << 8)  |
-           ((value & 0x000000FF) << 24);
-}
-
 // Function to validate binary input
 bool is_valid_binary(const std::string& input) {
     if (input.length() != 32) return false;
@@ -75,13 +64,4 @@ bool is_valid_binary(const std::string& input) {
     }
     
     return true;
-}
-
-// Function to clear screen (cross-platform)
-void clear_screen() {
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("clear");
-    #endif
 }
