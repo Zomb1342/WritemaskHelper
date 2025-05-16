@@ -37,15 +37,13 @@ int main()
         // Show hex conversion step
         std::cout << "\nResults:\n";
         std::cout << "Big Endian (binary):    " << std::bitset<32>(big_endian) << "\n";
-        std::cout << "Big Endian (hex):       0x" << std::hex << std::setfill('0') 
-                  << std::setw(8) << big_endian << "\n";
+        std::cout << "Big Endian (hex):       " << std::hex << std::setfill('0')  << std::setw(8) << big_endian << "\n";
 
         // Convert to little endian using Windows byte swap
         uint32_t little_endian = _byteswap_ulong(big_endian);
         
-        std::cout << "Little Endian (hex):    0x" << std::hex << std::setfill('0') 
-                  << std::setw(8) << little_endian << "\n";
-        std::cout << "Little Endian (binary): " << std::bitset<32>(little_endian) << "\n\n";
+        std::cout << "Little Endian (binary): " << std::bitset<32>(little_endian) << "\n";
+        std::cout << "Little Endian (hex):    " << std::hex << std::setfill('0') << std::setw(8) << little_endian << "\n\n";
 
         // Ask if user wants to continue
         std::cout << "Would you like to convert another number? (y/n): ";
